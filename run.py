@@ -20,28 +20,32 @@ def place_multiple_ships(board, ship_count=3):
             ships.append((row, col))
     return ships
 
-# Get player's guess with input examples
-def get_player_guess(board_size):
+# Get player's guess with input examples (modified to loop if already guessed)
+def get_player_guess(board_size, previous_guesses):
     while True:
         try:
             print(f"Enter a row (0 to {board_size - 1}) and column (0 to {board_size - 1}).")
             row = int(input("Guess Row: "))
             col = int(input("Guess Column: "))
             if 0 <= row < board_size and 0 <= col < board_size:
-                return row, col
+                if (row, col) in previous_guesses:
+                    print("You have already guessed there! Try again.")
+                else:
+                    return row, col
             else:
                 print("Invalid input! Row and column must be within the range 0 to", board_size - 1)
         except ValueError:
             print("Invalid input! Please enter integers only.")
 
-# Check if the guess is correct or already guessed
+# Check if the guess is correct or already guessed (modified to reflect the change)
 def check_guess(board, guess, ships, score, previous_guesses):
     row, col = guess
 
+    # If the guess is already made, return False to indicate invalid input
     if guess in previous_guesses:
-        print("Invalid input! You've already guessed this location.")
-        return False  # Return False to prevent using a turn
-    
+        print("You have already guessed there! Try again.")
+        return False  # Don't use up a turn
+
     if guess in ships:
         print("Hit! You sunk part of a battleship!")
         ships.remove(guess)  # Remove the hit ship
@@ -78,7 +82,7 @@ def play_battleship(player_name):
 
     for turn in range(turns):
         print(f"\nTurn {turn + 1}/{turns}")
-        guess = get_player_guess(board_size)
+        guess = get_player_guess(board_size, previous_guesses)
         if check_guess(board, guess, ships, score, previous_guesses):
             break
         print_board(board)
@@ -136,6 +140,7 @@ def main_menu():
 # Run the game
 if __name__ == "__main__":
     main_menu()
+
 
 
 
