@@ -4,19 +4,17 @@ import random
 def create_board(size=5):
     return [["~" for _ in range(size)] for _ in range(size)]
 
-# Print the game board with row and column numbers
+# Print the game board with row and column numbers (no borders)
 def print_board(board, show_ships=False, label=""):
     print(f"\n{label}")
-    print("  " + " ".join(str(i) for i in range(len(board[0]))))  # Column numbers
-    print("  " + "-" * (len(board[0]) * 2 - 1))  # Top border
+    print("   " + " ".join(str(i) for i in range(len(board[0]))))  # Column numbers aligned properly
     for idx, row in enumerate(board):
         if show_ships:
             # Show all board content, including ships
-            print(f"{idx} | " + " ".join(row) + " |")
+            print(f"{idx:2} " + " ".join(row))
         else:
             # Hide ships on the board and only show the results of guesses ('H' and 'X')
-            print(f"{idx} | " + " ".join('~' if cell == 'S' else cell for cell in row) + " |")
-    print("  " + "-" * (len(board[0]) * 2 - 1))  # Bottom border
+            print(f"{idx:2} " + " ".join('~' if cell == 'S' else cell for cell in row))
 
 # Place multiple ships randomly on the board (without overlapping)
 def place_multiple_ships(board, ship_count=3):
@@ -203,3 +201,4 @@ def main_menu():
 # Run the game
 if __name__ == "__main__":
     main_menu()
+
